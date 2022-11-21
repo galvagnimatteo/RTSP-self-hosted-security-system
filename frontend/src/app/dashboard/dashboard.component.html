@@ -1,0 +1,106 @@
+<div class="main-content">
+  <div class="container-fluid">
+      <div class="row">
+        <div class="col-lg-6 col-md-6 col-sm-6">
+            <div class="card">
+                <div (click)="onActivateGroup($event)" class="card-header card-header-primary clickable">
+                    <p class="p-alarm-status">Activate alarm for group</p>
+                </div>
+                <div class="card-body">
+                    <select #selectactivate>
+                        <option value="all">All cameras</option>
+                        <option value="{{zone}}" *ngFor="let zone of this.allZones">{{zone}}</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6 col-md-6 col-sm-6">
+            <div class="card">
+                <div (click)="onDeactivateGroup($event)" class="card-header card-header-primary clickable">
+                    <p class="p-alarm-status">Deactivate alarm for group</p>
+                </div>
+                <div class="card-body">
+                    <select #selectdeactivate>
+                        <option value="all">All cameras</option>
+                        <option value="{{zone}}" *ngFor="let zone of this.allZones">{{zone}}</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </div>
+      <div class="row">
+        <div class="col-lg-6 col-md-6 col-sm-6">
+            <div class="card card-stats">
+                <div class="card-header card-header-default card-header-icon">
+                    <div class="card-icon">
+                        <i class="material-icons">storage</i>
+                    </div>
+                    <p class="card-category">Used space</p>
+                    <h3 class="card-title">{{this.occupiedSpace}}/{{this.totalSpace}} GB</h3>
+                </div>
+                <div class="card-footer">
+                    <div class="stats">
+                        Delete recordings to free space
+                    </div>
+                </div>
+            </div>
+        </div>
+          <div class="col-lg-6 col-md-6 col-sm-6">
+              <div class="card card-stats">
+                  <div class="card-header card-header-default card-header-icon">
+                      <div class="card-icon">
+                          <i class="material-icons">video_library</i>
+                      </div>
+                      <p class="card-category">Saved recordings</p>
+                      <h3 class="card-title">{{this.recordingsNumber}}</h3>
+                  </div>
+                  <div class="card-footer">
+                      <div class="stats">
+                        <a *ngIf="!this.existTriggeredCamera" href (click)="onRecordingsClicked($event)">Go to recordings</a>
+                        <p *ngIf="this.existTriggeredCamera">Stop the alarm to see the recordings!</p>
+                    </div>
+                  </div>
+              </div>
+          </div>
+        </div>
+      <div class="row">
+          <div class="col-md-4" *ngFor="let camera of this.allCameras">
+              <div class="card card-chart" [ngSwitch]="camera.alarmStatus">
+                  <div (click)="onCameraAlarmClicked($event, camera)" class="card-header clickable" [ngClass]="{ 
+                        'card-header-success': camera.alarmStatus == 'DEACTIVATED', 
+                        'card-header-danger': camera.alarmStatus == 'TRIGGERED',
+                        'card-header-warning': camera.alarmStatus == 'ACTIVATED'
+                    }">
+                    <p class="p-alarm-status">Alarm {{camera.alarmStatus}}</p>
+                    <p class="p-alarm-click-status" *ngSwitchCase="'DEACTIVATED'">(Click to activate)</p>
+                    <p class="p-alarm-click-status" *ngSwitchCase="'TRIGGERED'">(Click to deactivate)</p>
+                    <p class="p-alarm-click-status" *ngSwitchCase="'ACTIVATED'">(Click to deactivate)</p>
+
+                  </div>
+                  <div class="card-body">
+                      <h4 class="card-title">{{camera.name}}</h4>
+                      <p class="card-category">Zone: {{camera.zone ? camera.zone : "no zone set"}}</p>
+                      <a href (click)="redirectToLiveStream($event, camera)">See live stream</a>
+                  </div>
+                  <div class="card-footer" [ngClass]="{ 
+                    'hide': camera.alarmStatus != 'DEACTIVATED'
+                    }">
+                    <a href (click)="onEditClicked($event, camera)" class="update-link" href="">Edit</a>
+                    <a href (click)="onDeleteClicked($event, camera)" class="delete-link" href="">Delete</a>
+                  </div>
+              </div>
+          </div>
+          <div class="col-md-4">
+            <div class="card card-chart">
+                <div class="card-header card-header-info">
+                  <p class="p-alarm-status">Add camera</p>
+                </div>
+                <div class="card-body" style="text-align: center!important;">
+                    <i (click)="onAddClicked($event)" class="material-icons plus clickable">add</i>
+                </div>
+
+            </div>
+          </div>
+      </div>
+    </div>
+</div>

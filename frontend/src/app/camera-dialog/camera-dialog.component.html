@@ -1,0 +1,18 @@
+<h1 mat-dialog-title>{{this.camera.id ? "Edit" : "Add"}} camera</h1> <!--id is undefined if creating a new camera-->
+<div mat-dialog-content>
+  <label>Name:</label>
+  <input placeholder="Camera name" [(ngModel)]="camera.name">
+  <br>
+  <label>Zone:</label>
+  <mat-autocomplete #auto="matAutocomplete" >
+    <mat-option *ngFor="let zone of filteredZones | async" [value]="zone">{{zone}}</mat-option>
+  </mat-autocomplete>
+  <input type="text" placeholder="Camera zone" [matAutocomplete]="auto" [(ngModel)]="camera.zone" type="text" [formControl]="control">
+  <br>
+  <label>RTSP URL:</label>
+  <input [disabled]="this.camera.id != undefined" placeholder="rtsp://your-url" [(ngModel)]="camera.rtspUrl">
+</div>
+<div>
+  <p *ngIf="this.error != ''" style="color: red;">{{this.error}}</p>
+  <button (click)="onSaveClicked($event, camera)" mat-raised-button class="btn btn-default">Save</button>
+</div>

@@ -1,0 +1,60 @@
+p:last-child {
+    margin-bottom: 0;
+}
+
+.p-alarm-status{
+    text-align: center;
+    font-size: large;
+    font-weight: 900;
+    margin-bottom: 0.5rem;
+}
+
+.p-alarm-click-status{
+    text-align: center;
+    font-size: medium;
+    font-weight: 600;
+}
+
+@media screen and (max-width: 500px) {
+    .main-content {
+      padding-left: 0;
+      padding-right: 0;
+    }
+}
+
+.update-link{
+    float: left;
+}
+
+.delete-link{
+    float: right;
+}
+
+.plus{
+    font-size: 3rem; 
+    font-weight: 400; 
+    margin-top: 0.5rem;
+}
+
+.clickable:hover{
+    cursor:pointer;
+}
+
+.hide{
+    display:none;
+}
+
+select{
+    width: 100%;
+    text-align: center;
+    -moz-appearance:menulist;
+    -webkit-appearance: menulist;
+    appearance:menulist;
+    height: 2rem;
+    font-size: large;
+}
+
+select, input{
+    border: 1px solid #999999;
+    border-radius: 3px;
+}

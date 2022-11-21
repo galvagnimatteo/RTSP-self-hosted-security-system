@@ -38,6 +38,7 @@ p:last-child {
 
 .clickable:hover{
     cursor:pointer;
+    filter: brightness(90%);
 }
 
 .hide{

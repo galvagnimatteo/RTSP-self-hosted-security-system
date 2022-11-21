@@ -9,3 +9,19 @@ select, input{
     border: 2px solid #999999;
     border-radius: 3px;
 }
+
+input{
+    margin-bottom: 1rem;
+    min-width: 100%;
+}
+
+button{
+    min-width: 100%;
+}
+
+@media screen and (max-width: 500px) {
+    .main-content {
+      padding-left: 0;
+      padding-right: 0;
+    }
+}

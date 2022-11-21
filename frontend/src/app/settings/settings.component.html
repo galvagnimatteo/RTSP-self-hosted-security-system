@@ -10,15 +10,11 @@
                   </div>
                   <div class="card-body">
                     <div>
-                        <label>Name:</label>
-                        <input placeholder="Camera name">
-                        <br>
-                        <label>Zone:</label>
-                        <input type="text" placeholder="Camera zone"  type="text">
-                        <br>
-                        <label>RTSP URL:</label>
-                        <input placeholder="rtsp://your-url">
-                      </div>
+                        <label>Alarm sound file:</label>
+                        <input type="file" accept="audio/mpeg">
+                        <button class="btn btn-default">Save</button>
+
+                    </div>
                   </div>
               </div>
             </div>
@@ -28,7 +24,22 @@
                       <p class="setting-title">Change Mailjet settings</p>
                     </div>
                     <div class="card-body">
-  
+                      <div>
+                        <label>From:</label>
+                        <input type="text" placeholder="from@email.com">
+                        <br>
+                        <label>To:</label>
+                        <input type="text" placeholder="to@email.com"  type="text">
+                        <br>
+                        <label>API key:</label>
+                        <input type="text" placeholder="your API key">
+                        <br>
+                        <label>Secret key:</label>
+                        <input type="text" placeholder="your secret key">
+
+                        <button class="btn btn-default">Save</button>
+
+                      </div>
                     </div>
                 </div>
             </div>

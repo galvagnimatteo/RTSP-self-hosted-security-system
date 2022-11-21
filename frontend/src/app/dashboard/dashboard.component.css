@@ -54,6 +54,7 @@ select{
     font-size: large;
 }
 
+
 select, input{
     border: 1px solid #999999;
     border-radius: 3px;

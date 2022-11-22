@@ -6,7 +6,6 @@ import { RouterModule } from '@angular/router';
 import { AppRoutingModule } from './app.routing';
 import { ComponentsModule } from './components/components.module';
 import { AppComponent } from './app.component';
-import { AdminLayoutComponent } from './layouts/admin-layout/admin-layout.component';
 import { SettingsComponent } from './settings/settings.component';
 import { BrowserModule } from '@angular/platform-browser';
 import { CameraDialogComponent } from './camera-dialog/camera-dialog.component';
@@ -31,7 +30,6 @@ import { RecordingsComponent } from './recordings/recordings.component';
   ],
   declarations: [
     AppComponent,
-    AdminLayoutComponent,
     SettingsComponent,
     CameraDialogComponent,
     RecordingsComponent,

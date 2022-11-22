@@ -8,6 +8,7 @@ import { catchError, retry } from 'rxjs/operators';
 import {MatDialog, MatDialogModule} from '@angular/material/dialog';
 import { RecordingsComponent } from 'app/recordings/recordings.component';
 import { resourceLimits } from 'worker_threads';
+import portsJson from '../../assets/ports.json';
 
 @Component({
   selector: 'app-dashboard',
@@ -27,7 +28,7 @@ export class DashboardComponent implements OnInit {
 
   public existTriggeredCamera: boolean = false;
 
-  source: any = new EventSource('http://localhost:8080/notification');
+  source: any = new EventSource('http://localhost:' + portsJson.backendMain + '/notification');
 
   constructor(private apiService: ApiService, private matDialog: MatDialog) { }
 
@@ -73,7 +74,7 @@ export class DashboardComponent implements OnInit {
       error: (e) => this.apiService.addStream(camera).subscribe({
 
         error: (err) => console.log(err),
-        complete: () => window.location.href = 'http://localhost:8083/pages/player/webrtc/' + camera.id + '/0'
+        complete: () => window.location.href = 'http://localhost:' + portsJson.rtsptoweb + '/pages/player/webrtc/' + camera.id + '/0'
 
       }),
 
@@ -85,7 +86,7 @@ export class DashboardComponent implements OnInit {
           error: (e) => console.log(e), 
           complete: () => this.apiService.addStream(camera).subscribe({
             error: (err) => console.log(err),
-            complete: () => window.location.href = 'http://localhost:8083/pages/player/webrtc/' + camera.id + '/0'
+            complete: () => window.location.href = 'http://localhost:' + portsJson.rtsptoweb + '/pages/player/webrtc/' + camera.id + '/0'
           }) 
 
         });

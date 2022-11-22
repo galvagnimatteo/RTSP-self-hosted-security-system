@@ -1,0 +1,26 @@
+.file-name{
+    text-align: center;
+    font-size: medium;
+    font-weight: 500;
+    margin-bottom: 0rem;
+}
+
+.hide{
+    display: none;
+}
+
+.clickable:hover{
+    cursor:pointer;
+}
+
+.play{
+    font-size: 4rem; 
+    font-weight: 400; 
+    margin-top: 0.5rem;
+}
+
+video{
+    min-width: 100%;
+    max-width: 100%;
+    margin-bottom: 1.5rem;
+}

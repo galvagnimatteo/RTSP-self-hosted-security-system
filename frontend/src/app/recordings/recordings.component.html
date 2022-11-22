@@ -1,0 +1,26 @@
+<h1 mat-dialog-title>Recordings</h1>
+<mat-dialog-content>
+<div class="main-content">
+    <div class="container-fluid">
+        <video id="video-player" (error)="this.onVideoError()" autoplay="true" *ngIf="this.selectedVideoSource != null" controls [src] = "this.selectedVideoSource"></video>
+        <div class="row">
+            <div class="col-md-4" *ngFor="let videoName of this.allVideos">
+              <div class="card card-chart">
+                  <div class="card-header card-header-info">
+                    <p class="file-name">{{videoName}}</p>
+                  </div>
+                  <div class="card-body" style="text-align: center!important;">
+                      <i (click)="onPlayVideoClicked($event, videoName)" class="material-icons play clickable">smart_display</i>
+                  </div>
+                  <div class="card-footer">
+                    <a href (click)="onDeleteClicked($event, videoName)">Delete</a>
+                  </div>
+              </div>
+            </div>
+        </div>
+      </div>
+      <p *ngIf="this.error" style="color: red;">Player error: video is too short to be played, consider deleting it.</p>
+  </div>
+</mat-dialog-content>
+  
+  

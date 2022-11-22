@@ -13,6 +13,7 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatAutocompleteModule } from "@angular/material/autocomplete";
 import { RecordingsComponent } from './recordings/recordings.component';
+import { AdminLayoutComponent } from './layouts/admin-layout/admin-layout.component';
 
 @NgModule({
   imports: [
@@ -30,10 +31,9 @@ import { RecordingsComponent } from './recordings/recordings.component';
   ],
   declarations: [
     AppComponent,
-    SettingsComponent,
     CameraDialogComponent,
     RecordingsComponent,
-
+    AdminLayoutComponent
   ],
   entryComponents: [
     CameraDialogComponent

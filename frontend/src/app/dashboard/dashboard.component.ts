@@ -1,4 +1,4 @@
-import { HttpErrorResponse } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Component, ElementRef, OnInit, Testability, ViewChild } from '@angular/core';
 import { ApiService } from 'app/api.service';
 import { Camera } from 'app/camera';
@@ -8,7 +8,6 @@ import { catchError, retry } from 'rxjs/operators';
 import {MatDialog, MatDialogModule} from '@angular/material/dialog';
 import { RecordingsComponent } from 'app/recordings/recordings.component';
 import { resourceLimits } from 'worker_threads';
-import portsJson from '../../assets/ports.json';
 
 @Component({
   selector: 'app-dashboard',
@@ -23,14 +22,23 @@ export class DashboardComponent implements OnInit {
   public recordingsNumber: any;
   public allZones: String[];
 
+  private portsJson: any;
+
   @ViewChild('selectactivate') selectActivate: ElementRef;
   @ViewChild('selectdeactivate') selectDeactivate: ElementRef;
 
   public existTriggeredCamera: boolean = false;
 
-  source: any = new EventSource('http://localhost:' + portsJson.backendMain + '/notification');
+  source: any;
 
-  constructor(private apiService: ApiService, private matDialog: MatDialog) { }
+  constructor(private http: HttpClient, private apiService: ApiService, private matDialog: MatDialog) { 
+
+    this.http.get("assets/ports.json").subscribe(data => {
+      this.portsJson = data;
+      this.source = new EventSource('http://localhost:' + this.portsJson.backendMain + '/notification');
+    });
+
+  }
 
   ngOnInit() {
     this.update();
@@ -74,7 +82,7 @@ export class DashboardComponent implements OnInit {
       error: (e) => this.apiService.addStream(camera).subscribe({
 
         error: (err) => console.log(err),
-        complete: () => window.location.href = 'http://localhost:' + portsJson.rtsptoweb + '/pages/player/webrtc/' + camera.id + '/0'
+        complete: () => window.location.href = 'http://localhost:' + this.portsJson.rtsptoweb + '/pages/player/webrtc/' + camera.id + '/0'
 
       }),
 
@@ -86,7 +94,7 @@ export class DashboardComponent implements OnInit {
           error: (e) => console.log(e), 
           complete: () => this.apiService.addStream(camera).subscribe({
             error: (err) => console.log(err),
-            complete: () => window.location.href = 'http://localhost:' + portsJson.rtsptoweb + '/pages/player/webrtc/' + camera.id + '/0'
+            complete: () => window.location.href = 'http://localhost:' + this.portsJson.rtsptoweb + '/pages/player/webrtc/' + camera.id + '/0'
           }) 
 
         });

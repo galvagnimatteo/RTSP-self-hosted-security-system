@@ -64,7 +64,7 @@ export class CameraDialogComponent implements OnInit {
           error: (err) => {console.log(err); this.error = "Error creating camera on server"},
           complete: () => this.dialogRef.close()
   
-        })
+        });
   
       }else{
   

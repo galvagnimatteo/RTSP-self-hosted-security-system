@@ -93,4 +93,8 @@ export class ApiService {
     return this.http.delete<any>('http://localhost:8080/deleteRecording?name=' + name);
   }
 
+  public uploadAlarmFile(file: FormData): Observable<any>{
+    return this.http.post<any>('http://localhost:8080/uploadAlarmFile', file);
+  }
+
 }

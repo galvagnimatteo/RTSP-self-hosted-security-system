@@ -1,5 +1,3 @@
-<!--TODO add mp3 file-->
-<!--TODO add email config-->
 <div class="main-content">
     <div class="container-fluid">
         <div class="row">
@@ -11,8 +9,11 @@
                   <div class="card-body">
                     <div>
                         <label>Alarm sound file:</label>
-                        <input type="file" accept="audio/mpeg">
-                        <button class="btn btn-default">Save</button>
+                        <input type="file" accept="audio/mpeg" (change)="onFileInput($event.target.files)">
+
+                        <p *ngIf="this.errorAlarmFile != ''" style="color: red;">{{this.errorAlarmFile}}</p>
+                        <p *ngIf="this.successAlarmFile != ''" style="color: green;">{{this.successAlarmFile}}</p>
+                        <button (click)="this.onSaveAlarmFile($event)" class="btn btn-default">Save</button>
 
                     </div>
                   </div>
@@ -37,6 +38,7 @@
                         <label>Secret key:</label>
                         <input type="text" placeholder="your secret key">
 
+                        <p *ngIf="this.errorEmailConfig != ''" style="color: red;">{{this.errorEmailConfig}}</p>
                         <button class="btn btn-default">Save</button>
 
                       </div>

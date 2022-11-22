@@ -16,7 +16,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.selfhostedsecurity.backend.Model.EmailConfig;
 import com.selfhostedsecurity.backend.Model.EmailConfigRepository;
-import com.selfhostedsecurity.backend.Utils.EventManager;
 
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -37,7 +36,6 @@ public class SystemController {
         emailConfigRepository.deleteAll(); //removes previous config
 
         EmailConfig emailConfig = emailConfigRepository.save(inputConfig); //saves new config
-        EventManager.sendSseEventsToUI("UPDATE");
 
 		return ResponseEntity.status(HttpStatus.OK).body(emailConfig);
 		

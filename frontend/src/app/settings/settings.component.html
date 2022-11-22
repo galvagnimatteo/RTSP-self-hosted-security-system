@@ -27,19 +27,20 @@
                     <div class="card-body">
                       <div>
                         <label>From:</label>
-                        <input type="text" placeholder="from@email.com">
+                        <input [(ngModel)]="fromMail" type="email" placeholder="from@email.com">
                         <br>
                         <label>To:</label>
-                        <input type="text" placeholder="to@email.com"  type="text">
+                        <input [(ngModel)]="toMails" type="text" placeholder="to@email.com,other_to@email.com"  type="text">
                         <br>
                         <label>API key:</label>
-                        <input type="text" placeholder="your API key">
+                        <input [(ngModel)]="apiKey" type="text" placeholder="your API key">
                         <br>
                         <label>Secret key:</label>
-                        <input type="text" placeholder="your secret key">
+                        <input [(ngModel)]="apiSecret" type="text" placeholder="your secret key">
 
                         <p *ngIf="this.errorEmailConfig != ''" style="color: red;">{{this.errorEmailConfig}}</p>
-                        <button class="btn btn-default">Save</button>
+                        <p *ngIf="this.successEmailConfig != ''" style="color: green;">{{this.successEmailConfig}}</p>
+                        <button (click)="this.onSaveEmailConfig($event)" class="btn btn-default">Save</button>
 
                       </div>
                     </div>

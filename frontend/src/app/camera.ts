@@ -4,4 +4,4 @@ export interface Camera {
     zone: string | undefined;
     rtspUrl: string;
     alarmStatus: string;
-  }
+}

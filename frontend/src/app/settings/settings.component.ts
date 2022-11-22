@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ApiService } from 'app/api.service';
+import { EmailConfig } from 'app/emailconfig';
 
 @Component({
   selector: 'app-settings',
@@ -14,6 +15,11 @@ export class SettingsComponent implements OnInit {
   successAlarmFile: String = '';
   successEmailConfig: String = '';
 
+  fromMail: String;
+  toMails: String;
+  apiKey: String;
+  apiSecret: String;
+
   constructor(private apiService: ApiService) { }
 
   ngOnInit(): void { }
@@ -24,7 +30,8 @@ export class SettingsComponent implements OnInit {
 
   onSaveAlarmFile(event: any){
 
-    this.successAlarmFile = "";
+    this.successAlarmFile = '';
+    this.errorAlarmFile = '';
 
     if(this.fileToUpload == null){
       this.errorAlarmFile = "No file selected";
@@ -38,12 +45,40 @@ export class SettingsComponent implements OnInit {
         this.apiService.uploadAlarmFile(formData).subscribe({
   
           error: (err) => {console.log(err); this.errorAlarmFile = "Server error uploading file"; this.successAlarmFile = ""},
-          complete: () => {this.errorAlarmFile = ""; this.successAlarmFile = "Upload completed succesfully!"}
+          complete: () => {this.errorAlarmFile = ""; this.successAlarmFile = "Upload completed successfully!"}
   
         });
       }else{
         this.errorAlarmFile = "Wrong file type"
       }
+    }
+  }
+
+  onSaveEmailConfig(event: any){
+
+    this.successEmailConfig = '';
+    this.errorEmailConfig = '';
+
+    if(this.apiKey.length == 0 || this.apiSecret.length == 0 || this.fromMail.length == 0 || this.toMails.length == 0){
+      this.errorEmailConfig = "Please fill all fields";
+    }else{
+
+      let toArray =  this.toMails.split(",");
+
+      let emailConfig: EmailConfig = {
+        mailFrom: this.fromMail,
+        mailTo: toArray,
+        apiKey: this.apiKey,
+        apiSecret: this.apiSecret,
+      };
+
+      this.apiService.setEmailConfig(emailConfig).subscribe({
+  
+        error: (err) => {console.log(err); this.errorEmailConfig = "Server error saving configuration"; this.successEmailConfig = ""},
+        complete: () => {this.errorAlarmFile = ""; this.successEmailConfig = "Configuration updated successfully!"}
+
+      });
+
     }
   }
 

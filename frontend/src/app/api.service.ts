@@ -3,6 +3,7 @@ import { Camera } from './camera';
 import { Observable, throwError } from 'rxjs';
 import { catchError, retry } from 'rxjs/operators';
 import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
+import { EmailConfig } from './emailconfig';
 
 @Injectable({
   providedIn: 'root'
@@ -95,6 +96,10 @@ export class ApiService {
 
   public uploadAlarmFile(file: FormData): Observable<any>{
     return this.http.post<any>('http://localhost:8080/uploadAlarmFile', file);
+  }
+
+  public setEmailConfig(emailConfig: EmailConfig): Observable<any>{
+    return this.http.post<any>('http://localhost:8080/setEmailConfig', emailConfig);
   }
 
 }

@@ -1,18 +1,29 @@
 package com.selfhostedsecurity.backend.Controller;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+
+import javax.annotation.Resource;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.env.Environment;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.reactive.function.client.WebClient;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.selfhostedsecurity.backend.Model.AudioPlayerThread;
 import com.selfhostedsecurity.backend.Model.Camera;
 import com.selfhostedsecurity.backend.Model.CameraRepository;
@@ -33,8 +44,17 @@ public class AlarmController {
     @Autowired
     EmailConfigRepository emailConfigRepository;
 
-    public AlarmController(){
+    @Autowired
+    private Environment environment;
+
+    public AlarmController() throws IOException{
         audioPlayerThread = new AudioPlayerThread("alarmSound.mp3");
+    }
+
+    @CrossOrigin
+    @GetMapping("/getBackendPythonPort")
+    public ResponseEntity<?> getBackendPythonPort(){
+        return ResponseEntity.status(HttpStatus.OK).body("port: "+environment.getProperty("backendPython"));
     }
 
 	@CrossOrigin
@@ -45,7 +65,7 @@ public class AlarmController {
 
         try{
 
-            WebClient wc = WebClient.create("http://127.0.0.1:8000/");
+            WebClient wc = WebClient.create("http://127.0.0.1:" + environment.getProperty("backendPython") + "/");
             Camera cameraToUpdate = cameraRepository.findById(inputCamera.getId()).get();
 
             if(!cameraToUpdate.getAlarmStatus().equals("DEACTIVATED")) return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Alarm must be deactivated to be activated");
@@ -79,7 +99,7 @@ public class AlarmController {
 
         try{
 
-            WebClient wc = WebClient.create("http://127.0.0.1:8000/");
+            WebClient wc = WebClient.create("http://127.0.0.1:" + environment.getProperty("backendPython") + "/");
             Camera cameraToUpdate = cameraRepository.findById(inputCamera.getId()).get();
 
             if(cameraToUpdate.getAlarmStatus().equals("DEACTIVATED")) return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Alarm is already disactivated");
@@ -145,7 +165,7 @@ public class AlarmController {
         cameraRepository.save(cameraToUpdate);
 
         //send mail
-        WebClient wc = WebClient.create("http://127.0.0.1:8000/");
+        WebClient wc = WebClient.create("http://127.0.0.1:" + environment.getProperty("backendPython") + "/");
 
         if(emailConfigRepository.count() != 0){ //sendmail only if emailconfig is set, otherwise the security system works fine but without the email notification
 
@@ -193,7 +213,7 @@ public class AlarmController {
         cameraToUpdate.setAlarmStatus("ACTIVATED"); 
         cameraRepository.save(cameraToUpdate);
 
-        WebClient wc = WebClient.create("http://127.0.0.1:8000/");
+        WebClient wc = WebClient.create("http://127.0.0.1:" + environment.getProperty("backendPython") + "/");
 
         wc
             .post()

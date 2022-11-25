@@ -1,6 +1,7 @@
 package com.selfhostedsecurity.backend.Controller;
 
 import java.io.File;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.HashMap;
@@ -70,8 +71,9 @@ public class SystemController {
 
     @CrossOrigin
     @GetMapping("/getRecordingsNumber")
-	public ResponseEntity<?> getRecordingsNumber() {
+	public ResponseEntity<?> getRecordingsNumber() throws IOException {
 
+        Files.createDirectories(Paths.get("../recordings"));
 		return ResponseEntity.status(HttpStatus.OK).body(new File("../recordings").list().length);
 		
 	}

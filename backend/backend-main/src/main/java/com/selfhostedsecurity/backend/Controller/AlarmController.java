@@ -1,16 +1,11 @@
 package com.selfhostedsecurity.backend.Controller;
 
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 
-import javax.annotation.Resource;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.env.Environment;
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -22,9 +17,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.reactive.function.client.WebClient;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.selfhostedsecurity.backend.Model.AudioPlayerThread;
 import com.selfhostedsecurity.backend.Model.Camera;
 import com.selfhostedsecurity.backend.Model.CameraRepository;
 import com.selfhostedsecurity.backend.Model.EmailConfig;
@@ -36,8 +28,6 @@ import reactor.core.publisher.Mono;
 @RestController
 public class AlarmController {
 
-    private AudioPlayerThread audioPlayerThread;
-
 	@Autowired
  	CameraRepository cameraRepository;
 
@@ -47,9 +37,7 @@ public class AlarmController {
     @Autowired
     private Environment environment;
 
-    public AlarmController() throws IOException{
-        audioPlayerThread = new AudioPlayerThread("alarmSound.mp3");
-    }
+    public AlarmController() throws IOException{ }
 
     @CrossOrigin
     @GetMapping("/getBackendPythonPort")
@@ -136,7 +124,13 @@ public class AlarmController {
                     }
                 }
 
-                if(!existTriggeredCamera) audioPlayerThread.setStopped(true);
+                if(!existTriggeredCamera){
+                    wc
+                        .post()
+                        .uri("/stopAlarm")
+                        .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+                        .retrieve().bodyToMono(String.class).subscribe();
+                }
             }
 			
             EventManager.sendSseEventsToUI("UPDATE");
@@ -187,12 +181,11 @@ public class AlarmController {
             .body(Mono.just(cameraToUpdate), Camera.class)
             .retrieve().bodyToMono(String.class).subscribe();
 
-        //start alarm sound
-        if(audioPlayerThread.isStopped()){
-            audioPlayerThread = new AudioPlayerThread("alarmSound.mp3");
-            audioPlayerThread.setStopped(false);
-            audioPlayerThread.start();
-        }
+        wc
+            .post()
+            .uri("/startAlarm")
+            .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+            .retrieve().bodyToMono(String.class).subscribe();
 
         EventManager.sendSseEventsToUI("UPDATE");
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
@@ -231,7 +224,13 @@ public class AlarmController {
             }
         }
 
-        if(!existTriggeredCamera) audioPlayerThread.setStopped(true);
+        if(!existTriggeredCamera){
+            wc
+                .post()
+                .uri("/stopAlarm")
+                .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+                .retrieve().bodyToMono(String.class).subscribe();
+        }
 
         EventManager.sendSseEventsToUI("UPDATE");
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();

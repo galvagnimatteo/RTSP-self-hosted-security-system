@@ -38,13 +38,13 @@ export class RecordingsComponent implements OnInit {
 
   onPlayVideoClicked(event: any, videoName: String){
     this.error = false;
-    this.selectedVideoSource = "http://localhost:" + portsJson.backendMain + "/getRecording?name=" + videoName;
+    this.selectedVideoSource = "http://localhost:" + portsJson.backendPython + "/getRecording?name=" + videoName;
   }
 
   onDeleteClicked(event: any, videoName: String){
     event.preventDefault();
 
-    if(this.selectedVideoSource == "http://localhost:" + portsJson.backendMain + "/getRecording?name=" + videoName) this.selectedVideoSource = null;
+    if(this.selectedVideoSource == "http://localhost:" + portsJson.backendPython + "/getRecording?name=" + videoName) this.selectedVideoSource = null;
 
     this.apiService.deleteRecording(videoName).subscribe({
       error: (err) => console.log(err),

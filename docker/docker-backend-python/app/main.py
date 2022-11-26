@@ -6,6 +6,16 @@ from send_mail import *
 from record_stream import *
 from typing import Union
 from fastapi.middleware.cors import CORSMiddleware
+import os
+from pydantic import BaseModel
+from pathlib import Path
+from fastapi.responses import StreamingResponse
+import json
+import subprocess
+from fastapi import UploadFile
+
+
+alarmPlayerProcess = None
 
 class Camera(BaseModel):
     id: int
@@ -30,6 +40,9 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+ports_json = open('ports.json')
+ports = json.load(ports_json)
 
 motion_detection_cameras = dict() #camera.id - motion detection process
 recording_cameras = dict()
@@ -81,4 +94,71 @@ async def stop_recording(camera: Camera):
 
     recording_cameras.get(camera.id).terminate()
 
-     
+
+@app.get("/getRecordingsNumber", status_code=200)
+async def get_recordings_number():
+
+    dir_path = './recordings'
+    count = 0
+    for path in os.listdir(dir_path):
+        if os.path.isfile(os.path.join(dir_path, path)):
+            count += 1
+
+    return count
+
+
+@app.get("/getAllRecordings", status_code=200)
+async def get_all_recordings():
+
+    dir_path = './recordings'
+    paths = sorted(Path(dir_path).iterdir(), key=os.path.getmtime)
+    names = {str(x).replace('recordings/', '') for x in paths}
+
+    return names
+
+
+@app.delete("/deleteRecording", status_code=200)
+async def delete_recording(name: str):
+    os.remove("./recordings/" + name)
+    requests.get(url = "http://localhost:" + str(ports['backendMain']) + "/updateFrontend")
+
+
+@app.get("/getRecording", status_code=200)
+async def get_recording(name: str):
+
+    def iterfile():
+        with open("./recordings/" + name, mode="rb") as file_like:
+            yield from file_like
+
+    return StreamingResponse(iterfile())
+
+
+@app.post("/startAlarm", status_code=200) #starts alarm if not already started
+async def start_alarm():
+
+    bashCommand = "ffplay -nodisp -autoexit -loop 9999 alarmSound.mp3"
+    global alarmPlayerProcess
+    if alarmPlayerProcess is not None:
+        poll = alarmPlayerProcess.poll()
+        if poll is not None:
+            # p.subprocess is deaad
+            alarmPlayerProcess = subprocess.Popen(bashCommand.split(), stdout=subprocess.PIPE)
+    else:
+        alarmPlayerProcess = subprocess.Popen(bashCommand.split(), stdout=subprocess.PIPE)
+
+
+@app.post("/stopAlarm", status_code=200) #stops alarm if not already stopped
+async def start_alarm():
+    global alarmPlayerProcess
+
+    if alarmPlayerProcess is not None:
+        poll = alarmPlayerProcess.poll()
+        if poll is None:
+            alarmPlayerProcess.kill()
+
+
+@app.post("/uploadAlarmFile", status_code=200)
+async def upload_alarm_file(file: UploadFile):
+    file_location = "./alarmSound.mp3"
+    with open(file_location, "wb+") as file_object:
+        file_object.write(file.file.read())

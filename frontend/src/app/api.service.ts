@@ -80,23 +80,23 @@ export class ApiService {
   }
 
   public getRecordingsNumber(): Observable<any>{
-    return this.http.get<any>('http://localhost:' + portsJson.backendMain + '/getRecordingsNumber');
+    return this.http.get<any>('http://localhost:' + portsJson.backendPython + '/getRecordingsNumber');
   }
 
   public getRecording(name: String): Observable<any>{
-    return this.http.get<any>('http://localhost:' + portsJson.backendMain + '/getRecording?name=' + name);
+    return this.http.get<any>('http://localhost:' + portsJson.backendPython + '/getRecording?name=' + name);
   }
 
   public getAllRecordings(): Observable<any>{
-    return this.http.get<String[]>('http://localhost:' + portsJson.backendMain + '/getAllRecordings');
+    return this.http.get<String[]>('http://localhost:' + portsJson.backendPython + '/getAllRecordings');
   }
 
   public deleteRecording(name: String): Observable<any>{
-    return this.http.delete<any>('http://localhost:' + portsJson.backendMain + '/deleteRecording?name=' + name);
+    return this.http.delete<any>('http://localhost:' + portsJson.backendPython + '/deleteRecording?name=' + name);
   }
 
   public uploadAlarmFile(file: FormData): Observable<any>{
-    return this.http.post<any>('http://localhost:' + portsJson.backendMain + '/uploadAlarmFile', file);
+    return this.http.post<any>('http://localhost:' + portsJson.backendPython + '/uploadAlarmFile', file);
   }
 
   public setEmailConfig(emailConfig: EmailConfig): Observable<any>{

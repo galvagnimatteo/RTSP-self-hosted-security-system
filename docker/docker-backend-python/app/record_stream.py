@@ -24,7 +24,7 @@ def record(camera):
     
     # Set up codec and output video settings
     codec = cv2.VideoWriter_fourcc(*'vp80')
-    writer = cv2.VideoWriter("../recordings/" + str(camera.name) + "-" + str(dt_string) + ".webm", codec, 30, (resized_width, resided_height))
+    writer = cv2.VideoWriter("./recordings/" + str(camera.name) + "-" + str(dt_string) + ".webm", codec, 30, (resized_width, resided_height))
 
     while True:
 

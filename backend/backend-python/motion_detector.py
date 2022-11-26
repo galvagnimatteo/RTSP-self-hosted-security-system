@@ -4,10 +4,14 @@ import numpy as np
 import requests
 import calendar
 import time
+import json
 
 #god forgive me for what I am about to code
 
 def motion_detection(camera):
+
+    ports_json = open('ports.json')
+    ports = json.load(ports_json)
 
     last_zero_movement_timestamp = 0
 
@@ -66,7 +70,7 @@ def motion_detection(camera):
                     if ts - last_zero_movement_timestamp > 120: #two minutes of no big movement found
                         last_zero_movement_timestamp = 0
                         is_alarm_triggered = False
-                        requests.post(url = "http://localhost:8080/onMovementStopped", json = camera.__dict__)
+                        requests.post(url = "http://localhost:"+ str(ports['backendMain']) +"/onMovementStopped", json = camera.__dict__)
 
         else:
 
@@ -86,7 +90,7 @@ def motion_detection(camera):
                             cv2.rectangle(img=img_brg, pt1=(x, y), pt2=(x + w, y + h), color=(0, 255, 0), thickness=2)
                             cv2.imwrite("alarm.jpeg", img_brg)
                             
-                            requests.post(url = "http://localhost:8080/onMovementDetected", json = camera.__dict__)
+                            requests.post(url = "http://localhost:"+ str(ports['backendMain']) +"/onMovementDetected", json = camera.__dict__)
                             is_alarm_triggered = True
 
                     else:

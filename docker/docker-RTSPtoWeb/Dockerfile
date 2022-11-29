@@ -27,4 +27,11 @@ COPY --from=builder /go/src/app/config.json /config
 ENV GO111MODULE="on"
 ENV GIN_MODE="release"
 
+ARG port
+ENV port=${port}
+
+RUN echo sed -i 's/8083/'$port'/' /config/config.json >> start.sh
+RUN chmod +x start.sh
+RUN ./start.sh
+
 CMD ["./rtsp-to-web", "--config=/config/config.json"]

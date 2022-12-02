@@ -35,7 +35,10 @@ As a matter of fact, every IP camera with RTSP support will work.
     ./mvnw package
     ```
     This will generate a .jar file inside the /target folder.
-    Launch it with java -Dserver.port=MAIN_BACKEND_PORT -Dspring.application.json='{"rtsptoweb": RTSPTOWEB_PORT,"backendMain": MAIN_BACKEND_PORT,      "backendPython": PYTHON_BACKEND_PORT,"frontend": FRONTEND_PORT}' -jar ./backend-main-0.0.1-SNAPSHOT.jar
+    Launch it with 
+    ```
+    java -Dserver.port=MAIN_BACKEND_PORT -Dspring.application.json='{"rtsptoweb": RTSPTOWEB_PORT,"backendMain": MAIN_BACKEND_PORT,      "backendPython": PYTHON_BACKEND_PORT,"frontend": FRONTEND_PORT}' -jar ./backend-main-0.0.1-SNAPSHOT.jar
+    ```
 1. Launch the Python backend (with ports.json modified accordingly to your desire)
     ```
     uvicorn main:app --port PYTHON_BACKEND_PORT --host 0.0.0.0 --reload

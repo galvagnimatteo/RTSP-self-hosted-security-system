@@ -4,17 +4,6 @@ This security system is a side project created to be a self-hosted, open source 
 (kinda) cheap alternative to a proprietary security system that works only with cameras of the same brand.
 As a matter of fact, every IP camera with RTSP support will work.
 
-## Table of Contents
-
-- [Installation](#installation)
-- [Configuration](#configuration)
-- [Command-line](#command-line)
-- [API documentation](#api-documentation)
-- [Limitations](#Limitations)
-- [Performance](#Performance)
-- [Authors](#Authors)
-- [License](#license)
-
 ## Installation
 
 ### Quick installation
@@ -39,7 +28,7 @@ As a matter of fact, every IP camera with RTSP support will work.
     HOST_IP:FRONTEND_PORT
     ```
 
-## Installation from source
+### Installation from source
 
 1. Compile the main backend
     ```

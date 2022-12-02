@@ -59,7 +59,7 @@ As a matter of fact, every IP camera with RTSP support will work.
 
 ## License
 
-See the [LICENSE.md](LICENSE.md) file for details
+See the [LICENSE](LICENSE) file for details
 
 ## Software used 
 

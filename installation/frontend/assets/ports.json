@@ -1,0 +1,5 @@
+{
+    "rtsptoweb": 8083,
+    "backendMain": 8080,
+    "backendPython": 8000
+}

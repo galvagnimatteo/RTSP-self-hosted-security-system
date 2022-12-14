@@ -3,6 +3,7 @@ package com.selfhostedsecurity.backend.Utils;
 import javax.annotation.PostConstruct;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
@@ -19,6 +20,9 @@ public class AlarmRestartingService {
     @Autowired
     CameraRepository cameraRepository;
 
+    @Autowired
+    private Environment environment;
+
     //in case of unexpected shutdown, if the alarm of some cameras was activated, restart motion detection
     @PostConstruct
     private void postConstruct() {
@@ -27,7 +31,7 @@ public class AlarmRestartingService {
 
             if(c.getAlarmStatus().equals("ACTIVATED")){
 
-                WebClient wc = WebClient.create("http://127.0.0.1:8000/");
+                WebClient wc = WebClient.create("http://127.0.0.1:" + environment.getProperty("backendPython") + "/");
     
                 wc
                     .post()
@@ -40,7 +44,7 @@ public class AlarmRestartingService {
 
                 //if during alarm triggered an unexpected shutdown happens, on restarting the alarm will be reactivated but not triggered
 
-                WebClient wc = WebClient.create("http://127.0.0.1:8000/");
+                WebClient wc = WebClient.create("http://127.0.0.1:"+ environment.getProperty("backendPython") +"/");
                 Camera cameraToUpdate = cameraRepository.findById(c.getId()).get();
     
                 wc

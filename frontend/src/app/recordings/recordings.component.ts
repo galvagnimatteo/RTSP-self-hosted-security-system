@@ -1,3 +1,4 @@
+import { DOCUMENT } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { AfterViewInit, Component, ElementRef, Inject, OnInit, ViewChild } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
@@ -16,7 +17,7 @@ export class RecordingsComponent implements OnInit {
 
   public error: boolean;
 
-  constructor(private http: HttpClient, private apiService: ApiService, @Inject(MAT_DIALOG_DATA) public data: any) { }
+  constructor(private http: HttpClient, private apiService: ApiService, @Inject(MAT_DIALOG_DATA) public data: any, @Inject(DOCUMENT) private document) { }
 
   ngOnInit(): void {
 
@@ -38,13 +39,13 @@ export class RecordingsComponent implements OnInit {
 
   onPlayVideoClicked(event: any, videoName: String){
     this.error = false;
-    this.selectedVideoSource = "http://localhost:" + portsJson.backendPython + "/getRecording?name=" + videoName;
+    this.selectedVideoSource = "http://" + document.location.hostname + ":" + portsJson.backendPython + "/getRecording?name=" + videoName;
   }
 
   onDeleteClicked(event: any, videoName: String){
     event.preventDefault();
 
-    if(this.selectedVideoSource == "http://localhost:" + portsJson.backendPython + "/getRecording?name=" + videoName) this.selectedVideoSource = null;
+    if(this.selectedVideoSource == "http://" + document.location.hostname + ":" + portsJson.backendPython + "/getRecording?name=" + videoName) this.selectedVideoSource = null;
 
     this.apiService.deleteRecording(videoName).subscribe({
       error: (err) => console.log(err),

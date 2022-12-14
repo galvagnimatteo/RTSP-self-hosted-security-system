@@ -1,5 +1,5 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { Component, ElementRef, OnInit, Testability, ViewChild } from '@angular/core';
+import { Component, ElementRef, Inject, OnInit, Testability, ViewChild } from '@angular/core';
 import { ApiService } from 'app/api.service';
 import { Camera } from 'app/camera';
 import { CameraDialogComponent } from 'app/camera-dialog/camera-dialog.component';
@@ -7,6 +7,7 @@ import {MatDialog, MatDialogModule} from '@angular/material/dialog';
 import { RecordingsComponent } from 'app/recordings/recordings.component';
 import { resourceLimits } from 'worker_threads';
 import portsJson from '../../assets/ports.json';
+import { DOCUMENT } from '@angular/common';
 
 
 @Component({
@@ -29,9 +30,9 @@ export class DashboardComponent implements OnInit {
 
   source: any;
 
-  constructor(private http: HttpClient, private apiService: ApiService, private matDialog: MatDialog) { 
+  constructor(private http: HttpClient, private apiService: ApiService, private matDialog: MatDialog, @Inject(DOCUMENT) private document) { 
 
-    this.source = new EventSource('http://localhost:' + portsJson.backendMain + '/notification');
+    this.source = new EventSource('http://' + document.location.hostname + ':' + portsJson.backendMain + '/notification');
 
   }
 
@@ -77,7 +78,7 @@ export class DashboardComponent implements OnInit {
       error: (e) => this.apiService.addStream(camera).subscribe({
 
         error: (err) => console.log(err),
-        complete: () => window.location.href = 'http://localhost:' + portsJson.rtsptoweb + '/pages/player/webrtc/' + camera.id + '/0'
+        complete: () => window.location.href = 'http://' + document.location.hostname + ':' + portsJson.rtsptoweb + '/pages/player/webrtc/' + camera.id + '/0'
 
       }),
 
@@ -89,7 +90,7 @@ export class DashboardComponent implements OnInit {
           error: (e) => console.log(e), 
           complete: () => this.apiService.addStream(camera).subscribe({
             error: (err) => console.log(err),
-            complete: () => window.location.href = 'http://localhost:' + portsJson.rtsptoweb + '/pages/player/webrtc/' + camera.id + '/0'
+            complete: () => window.location.href = 'http://' + document.location.hostname + ':' + portsJson.rtsptoweb + '/pages/player/webrtc/' + camera.id + '/0'
           }) 
 
         });

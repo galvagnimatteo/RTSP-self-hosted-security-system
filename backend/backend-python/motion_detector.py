@@ -76,9 +76,9 @@ def motion_detection(camera):
 
             for contour in contours:
 
-                if cv2.contourArea(contour) > 3000:
+                if cv2.contourArea(contour) > 5000:
 
-                    if movement_frames_counter == 4: #at least 4 frames with movement
+                    if movement_frames_counter == 6: #at least 6 frames with movement
 
                         if is_alarm_triggered:
 
